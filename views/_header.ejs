@@ -1,3 +1,7 @@
 <div id="header">
-        NodeJs Authentication
+        <% if(locals.user){%>
+                <a href="/"> <%= user.name %> </a>
+        <%} else {%>
+                <a href="/">NodeJs Authentication</a>
+        <%} %>
 </div>

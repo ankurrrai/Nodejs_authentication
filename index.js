@@ -12,16 +12,15 @@ const session=require('express-session');
 const cookieParser=require('cookie-parser');
 const MongoStore=require('connect-mongo')
 
-
+app.use('/assests',express.static(__dirname+'/assests'))
 app.use(express.urlencoded());
 app.use(cookieParser());
-app.use('/assests',express.static(__dirname+'/assests'));
+	
 app.set('view engine','ejs');
 app.set('views','./views');
 app.use(expressLayouts);
 app.set('layout extractStyles',true);
 app.set('layout extractScripts',true);
-
 
 
 app.use(session({
@@ -30,12 +29,13 @@ app.use(session({
     saveUninitialized:false,
     resave:false,
     cookie:{
-        maxAge:(1000**60*10),
+        maxAge:(1000*60*10),
     },
     store:MongoStore.create({
         mongoUrl:'mongodb://127.0.0.1:27017/nodejs_authentication_development'
     })
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);

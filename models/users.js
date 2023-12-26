@@ -1,4 +1,6 @@
 const mongoose=require('mongoose');
+const bcrypt = require('bcrypt');
+const SALT_WORK_FACTOR = 10;
 
 const userSchema=new mongoose.Schema({
     email:{
@@ -19,6 +21,8 @@ const userSchema=new mongoose.Schema({
 },{
     timestamps:true
 });
+
+
 
 const User=mongoose.model('user',userSchema);
 module.exports=User
