@@ -17,12 +17,14 @@ const userSchema=new mongoose.Schema({
     password:{
         type:String,
         required:true, 
+        required: true, 
+        rounds: 9
     }
 },{
     timestamps:true
 });
 
+userSchema.plugin(require('mongoose-bcrypt'))
 
-
-const User=mongoose.model('user',userSchema);
+const User=mongoose.model('User',userSchema);
 module.exports=User

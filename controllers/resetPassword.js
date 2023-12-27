@@ -74,19 +74,16 @@ module.exports.resetPassword=async function(req,res){
 
 module.exports.newPassword=async function(req,res){
     try {
-        console.log(req.body.accessToken)
+
         if (req.body.confirmPassword!=req.body.password){
             req.flash('error','Kindly retry!')
             return res.redirect('back')
         };
 
         let accessToken=await AccessToken.findOne({accessToken:req.body.accessToken,isValid:true});
-        console.log(accessToken)
         if (accessToken){
-            let user=await User.findById(accessToken.user);
-            user.password=req.body.password;
+            let user=await User.findByIdAndUpdate(accessToken.user,{password:req.body.password});
             accessToken.isValid=false;
-            user.save();
             accessToken.save();
             req.flash('success','Password changed successfully!')
             return res.redirect('/')

@@ -12,11 +12,23 @@ passport.use(new LocalStartegy(
     function(req,email,password,done){
         try {
             User.findOne({email:email}).then(function(user){
-                if (!user || user.password!=password) {
+                if (!user) {
                     req.flash('error','UserName or Password is not correct!')
                     return done(null,false);
                 };
-                return done(null,user);
+                user.verifyPassword(password).then(function(valid){
+                    if(valid){
+                        return done(null,user);
+                    }else{
+                        req.flash('error','UserName or Password is not correct!')
+                        return done(null,false);
+                    }
+                }).catch(function(err){
+                    req.flash('error',err)
+                    return done(err)
+                })
+                
+                
             }).catch(function(err){
                 req.flash('error',err)
                 return done(err)

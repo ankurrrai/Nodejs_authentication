@@ -26,7 +26,7 @@ module.exports.createSession=function(req,res){
 
 module.exports.create=async function(req,res){
     try {
-        console.log('started',req.body)
+        
         if (req.body.confirmPassword!=req.body.password){
             console.log('Password and Confirm Password is not same!')
             req.flash('error','Password and Confirm Password is not same!')
@@ -72,16 +72,22 @@ module.exports.updatePassword=function(req,res){
 
 module.exports.updateNewPassword=async function(req,res){
     if (req.isAuthenticated()){
-        if(req.body.password!=res.locals.user.password){
+
+        let user=await User.findById(res.locals.user._id);
+        if (!user.verifyPasswordSync(req.body.password)){
             req.flash('error','Please provide the correct password');
             return res.redirect('back');
-        };
+        }
+
+        // if(req.body.password!=res.locals.user.password){
+        //     req.flash('error','Please provide the correct password');
+        //     return res.redirect('back');
+        // };
         if (req.body.confirmPassword!=req.body.newpassword){
             req.flash('error','Provided password is not same..');
             return res.redirect('back');
         };
-        let user=await User.findById(res.locals.user._id);
-        user.password=req.body.confirmPassword;
+        user=await User.findByIdAndUpdate(res.locals.user._id,{password:req.body.confirmPassword});
         user.save();
         req.flash('success','Password changed successful!');
         return res.redirect('/')
