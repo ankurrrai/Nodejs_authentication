@@ -1,7 +1,8 @@
 const queue=require('../config/kue');
-const commentsMailer=require('../mailers/reset_password');
+const resetPassword=require('../mailers/reset_password');
 
+// Created the resets worker
 queue.process('resets',function(job,done){
-    commentsMailer.newComment(job.data)
+    resetPassword.resetPass(job.data)
     done();
 })

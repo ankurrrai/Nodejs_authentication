@@ -1,5 +1,6 @@
 const User=require('../models/users')
 
+// Render the signin page
 module.exports.signIn=function(req,res){
     if (req.isAuthenticated()){
         return res.redirect('/')
@@ -9,6 +10,7 @@ module.exports.signIn=function(req,res){
     })
 };
 
+// Render the signup page
 module.exports.signUp=function(req,res){
     if (req.isAuthenticated()){
         return res.redirect('/')
@@ -19,11 +21,13 @@ module.exports.signUp=function(req,res){
 };
 
 
+// Sign in using passport local startegy and google startegy
 module.exports.createSession=function(req,res){
     req.flash('success','Sign-In SuccessFully!')
     return res.redirect('/')
 };
-
+ 
+// Signup with user details
 module.exports.create=async function(req,res){
     try {
         
@@ -47,7 +51,7 @@ module.exports.create=async function(req,res){
     }
 };
 
-
+// Logout the session
 module.exports.destroySession=function(req,res,next){
     req.logout(function(err){
         if(err){
@@ -60,6 +64,7 @@ module.exports.destroySession=function(req,res,next){
     })
 };
 
+// render the page for update the password
 module.exports.updatePassword=function(req,res){
     if (req.isAuthenticated()){
         return res.render('updatePassword.ejs',{
@@ -70,6 +75,8 @@ module.exports.updatePassword=function(req,res){
     
 };
 
+
+// Update the password with the help of older
 module.exports.updateNewPassword=async function(req,res){
     if (req.isAuthenticated()){
 
@@ -78,11 +85,6 @@ module.exports.updateNewPassword=async function(req,res){
             req.flash('error','Please provide the correct password');
             return res.redirect('back');
         }
-
-        // if(req.body.password!=res.locals.user.password){
-        //     req.flash('error','Please provide the correct password');
-        //     return res.redirect('back');
-        // };
         if (req.body.confirmPassword!=req.body.newpassword){
             req.flash('error','Provided password is not same..');
             return res.redirect('back');

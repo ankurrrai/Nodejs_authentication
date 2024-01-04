@@ -1,9 +1,8 @@
 const passport = require('passport');
 const LocalStartegy=require('passport-local');
-
-
 const User=require('../models/users');
 
+//eastablished the local startegy
 passport.use(new LocalStartegy(
     {
         usernameField:'email',
@@ -43,10 +42,12 @@ passport.use(new LocalStartegy(
 
 ));
 
+// serialize the user details
 passport.serializeUser(function(user,done){
     return done(null,user.id);
 });
 
+// deseriallize the user details through id
 passport.deserializeUser(function(id,done){
     User.findOne({_id:id}).then(function(user){
          return done(null,user);
@@ -56,8 +57,9 @@ passport.deserializeUser(function(id,done){
     
 });
 
+// Custom authentication
 passport.checkAuthentication=function(req,res,next){
-    if (req.isAuthenticated()){
+    if (req.isAuthenticated()){   //req.isAuthenticated() is inbuilt function of passport
         return next();
     };
     return res.redirect('/users/sign-in')

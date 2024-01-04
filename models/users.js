@@ -1,6 +1,4 @@
 const mongoose=require('mongoose');
-const bcrypt = require('bcrypt');
-const SALT_WORK_FACTOR = 10;
 
 const userSchema=new mongoose.Schema({
     email:{
@@ -17,14 +15,14 @@ const userSchema=new mongoose.Schema({
     password:{
         type:String,
         required:true, 
-        required: true, 
+        bcrypt: true, //Encryption provided
         rounds: 9
     }
 },{
     timestamps:true
 });
 
-userSchema.plugin(require('mongoose-bcrypt'))
+userSchema.plugin(require('mongoose-bcrypt')) //used for passpword encrytion refer its documnetions for more
 
 const User=mongoose.model('User',userSchema);
 module.exports=User

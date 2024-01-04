@@ -1,21 +1,20 @@
 const nodemailer=require('nodemailer');
 const ejs=require('ejs');
 const path=require('path');
-const env=require('./environment')
 
-// let transporter=nodemailer.createTransport(env.smartConnect_smtp);
-
+// Give the transporter details
 let transporter=nodemailer.createTransport({
     service:'gmail',
     host:'smtp.gmail.com',
     port:587,
     secure:false,
     auth:{
-        user:process.env.smartConnect_smtp_auth_userName,
-        pass:process.env.smartConnect_smtp_auth_pass
+        user:process.env.smartConnect_smtp_auth_userName, //Add the User name
+        pass:process.env.smartConnect_smtp_auth_pass //Add the user password
     }
 })
 
+// To give mailers views path which need to share over mail
 let renderTemplate=(data,relativePath)=>{
     let mailHTML;
     ejs.renderFile(

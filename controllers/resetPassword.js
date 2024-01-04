@@ -6,6 +6,7 @@ const queue=require('../config/kue');
 const resetPassWorker=require('../workers/resetWorkers');
 const passport = require('passport');
 
+// Open The forget password
 module.exports.forgetPassword=function(req,res){
     if (req.isAuthenticated()){
         return res.redirect('/');
@@ -15,6 +16,7 @@ module.exports.forgetPassword=function(req,res){
     })
 };
 
+// heck the email and share the email using nodemailer and kue
 module.exports.updateNewPassword=async function(req,res){
     try {
         let user=await User.findOne({email:req.body.email});
@@ -49,6 +51,7 @@ module.exports.updateNewPassword=async function(req,res){
     
 };
 
+// Check the token details and render the page
 module.exports.resetPassword=async function(req,res){
     try {
         let accessToken=await AccessToken.findOne({accessToken:req.query.accessToken});
@@ -72,6 +75,7 @@ module.exports.resetPassword=async function(req,res){
     }
 };
 
+// Update with new password
 module.exports.newPassword=async function(req,res){
     try {
 
