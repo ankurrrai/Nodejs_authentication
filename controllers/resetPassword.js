@@ -2,8 +2,9 @@ const crypto=require('crypto');
 const User=require('../models/users');
 const AccessToken = require('../models/accesstoken');
 
-const queue=require('../config/kue');
-const resetPassWorker=require('../workers/resetWorkers');
+// const queue=require('../config/kue');
+const resetMailer=require('../mailers/reset_password')
+// const resetPassWorker=require('../workers/resetWorkers');
 const passport = require('passport');
 
 // Open The forget password
@@ -29,10 +30,11 @@ module.exports.updateNewPassword=async function(req,res){
 
             accessToken=await AccessToken.findOne({accessToken:accessToken.accessToken}).populate('user');
 
-            let job=queue.create('resets',accessToken).save(function(err){
-                if (err){console.log('reset_password_controllers : Error in sending queue ',err);return;}
+            resetMailer.resetPass(accessToken)
+            // let job=queue.create('resets',accessToken).save(function(err){
+            //     if (err){console.log('reset_password_controllers : Error in sending queue ',err);return;}
                 
-            });
+            // });
 
             req.flash('success','Reset link shared to your email.')
             return res.redirect('/')
